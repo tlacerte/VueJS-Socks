@@ -37,15 +37,20 @@ Vue.component('product', {
           Add to cart
           </button>
 
+          <button @click="removeFromCart" 
+          >
+          Remove from cart
+          </button>
+
        </div> 
 
         <div>
             <p v-if="!reviews.length">There are no reviews yet.</p>
             <ul v-else>
                 <li v-for="(review, index) in reviews" :key="index">
-                  <p>{{ review.name }}</p>
-                  <p>Rating:{{ review.rating }}</p>
-                  <p>{{ review.review }}</p>
+                  <p>Name: {{ review.name }}</p>
+                  <p>Rating: {{ review.rating }}</p>
+                  <p>Review: {{ review.review }}</p>
                 </li>
             </ul>
         </div>
@@ -86,6 +91,9 @@ Vue.component('product', {
       },
       addReview(productReview) {
         this.reviews.push(productReview)
+      },
+      removeFromCart() {
+        this.$emit('remove-from-cart', this.variants[this.selectedVariant].variantId)
       }
     },
     computed: {
@@ -199,6 +207,13 @@ var app = new Vue({
     methods: {
       updateCart(id) {
         this.cart.push(id)
+      },
+      removeItem(id){
+        for(var i = this.cart.length - 1; i >=0; i--) {
+          if (this.cart[i] === id) {
+            this.cart.splice(i, 1);
+          }
+        }
       }
     }
 })
